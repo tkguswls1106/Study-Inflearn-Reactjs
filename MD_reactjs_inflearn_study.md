@@ -117,4 +117,17 @@ element는 생성후에 속성이나 children을 변경할수 없으므로,
 
 -------------------
 
+React component의 입력은 Props이고, 출력은 React element이다.
+결국 React component가 해주는 역할은, 어떠한 속성들을 입력받아서 그에 맞는 화면에 나타날 element를 생성하여 return 해주는것이다.
+마치 이를 객체지향에 비유하자면, Component는 클래스이고, element는 해당 클래스의 인스턴스 인것이다.
+
+Props: 컴포넌트에 전달한 다양한 정보를 담고 있는 자바스크립트 객체이다.
+Props의 Prop은 Property의 줄임말이다. 리액트에서는 속성이라는 뜻이다.
+이 속성은 바로 React component의 속성이다.
+즉, 컴포넌트에 어떠한 데이터를 전달하고 전달된 데이터의 내용에 따라 다른 모습의 element를 화면에 렌더링하고 싶을때, 해당 데이터를 props에 넣어서 그 props를 컴포넌트에 전달하여 새로운 element를 반환하여 출력하는 것이다.
+
+내가 생각하기에,
+component는 함수처럼 틀로써, props라는 속성값 매개변수를 파라미터로 넣어주면, 각기 다른 element 결과가 반환되어 돌아오는것 같다.
+즉, 다른 데이터로 element의 내용을 교체하여 새로운 element를 화면에 교체하여 띄워주고 싶을때 사용하는것 같다.
+
 ```
