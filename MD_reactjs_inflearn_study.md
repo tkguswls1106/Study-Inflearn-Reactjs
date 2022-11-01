@@ -78,6 +78,12 @@ JSX 코드는 내부적으로 html과 xml코드를 javascript 로 변환하는 �
 이처럼 JSX 코드를 javascript 코드로 변환해주는 역할과 같은 역할을 하는것이,
 React의 createElement 라는 함수이다.
 
+React.createElement(
+    type,
+    [props],
+    [...children]
+)
+
 - JSX 사용함 -
 <div>Hello, {name}</div>
 - JSX 사용 안함 -
@@ -91,11 +97,23 @@ ReactDOM.render(
     document.getElementById('root')
 );
 // html 코드 사용하다가 도중에 중간에 js코드를 사용하고 싶다면 {} 중괄호로 묶어 그 안에 js코드를 적어주면 된다.
+// 이는 React element인 element를, Dom element (html element)인 <div id="root"></div> 부분에 렌더링 하는 코드이다.
+// 참고로 이는 html 파일의 root dom node 부분인 <div id="root"></div> 안에 자동으로 렌더링하여 넣어져서 실행되어 사용되게 된다.
+// 즉, 이 렌더링 과정은 virtual dom에서 실제 dom으로 이동하는 과정인 것이다.
 
 -------------------
 
 백틱 `: https://developerjm.tistory.com/25
 사용법은 영문으로 ₩키를 누르면 된다.
+
+-------------------
+
+React element는 리액트의 virtual dom 에 존재하는 것이고,
+Dom element는 실제 브라우저의 dom에 존재하는 것이다.
+둘이 다른것이니 헷갈리면 안된다.
+
+element는 생성후에 속성이나 children을 변경할수 없으므로,
+새로운 element를 생성하여 바꿔치기하는 방식으로 변경한다.
 
 -------------------
 
