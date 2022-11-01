@@ -83,6 +83,7 @@ React.createElement(
     [props],
     [...children]
 )
+// 여기 props 부분에는 자바스크립트 객체를 넣으면 된다고 한다. 그러면 해당 컴포넌트의 props가 된다고 한다.
 
 - JSX 사용함 -
 <div>Hello, {name}</div>
@@ -127,7 +128,11 @@ Props의 Prop은 Property의 줄임말이다. 리액트에서는 속성이라는
 즉, 컴포넌트에 어떠한 데이터를 전달하고 전달된 데이터의 내용에 따라 다른 모습의 element를 화면에 렌더링하고 싶을때, 해당 데이터를 props에 넣어서 그 props를 컴포넌트에 전달하여 새로운 element를 반환하여 출력하는 것이다.
 
 내가 생각하기에,
-component는 함수처럼 틀로써, props라는 속성값 매개변수를 파라미터로 넣어주면, 각기 다른 element 결과가 반환되어 돌아오는것 같다.
+component는 자바스크립트 함수처럼 틀로써, props라는 속성값 매개변수를 파라미터로 넣어주면, 각기 다른 element 결과가 반환되어 돌아오는것 같다.
 즉, 다른 데이터로 element의 내용을 교체하여 새로운 element를 화면에 교체하여 띄워주고 싶을때 사용하는것 같다.
+마치 비유하자면 함수가 component, 함수 파라미터가 props, return 반환값이 element 인것 같다.
+
+모든 리액트 컴포넌트는 그들의 Props에 관해서는 Pure 함수 같은 역할을 해야한다.
+즉, 모든 리액트 컴포넌트는 Props를 직접 바꿀수 없고, 같은 Props에 대해서는 항상 같은 결과를 보여주어야한다.
 
 ```
