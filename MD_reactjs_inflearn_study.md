@@ -102,6 +102,19 @@ ReactDOM.render(
 // 참고로 이는 html 파일의 root dom node 부분인 <div id="root"></div> 안에 자동으로 렌더링하여 넣어져서 실행되어 사용되게 된다.
 // 즉, 이 렌더링 과정은 virtual dom에서 실제 dom으로 이동하는 과정인 것이다.
 
+- 함수 컴포넌트 및 JSX 사용 예시 코드 -
+function Welcome(props) {
+    return <h1>안녕, {props.name}</h1>;
+}
+const element = <Welcome name="인제" />;
+ReactDOM.render(
+    element,
+    document.getElementById('root')
+);
+// 이처럼 Component 태그의 이름은 항상 대문자로 시작해야 한다.
+// 참고로 헷갈리지 말아야할것은,
+// 함수 컴포넌트인 function Welcome 안에서의 <h1>태그는 대문자로 시작하는게 아니니 사용여부를 잘 따져 구분하자.
+
 -------------------
 
 백틱 `: https://developerjm.tistory.com/25
@@ -127,6 +140,8 @@ Props의 Prop은 Property의 줄임말이다. 리액트에서는 속성이라는
 이 속성은 바로 React component의 속성이다.
 즉, 컴포넌트에 어떠한 데이터를 전달하고 전달된 데이터의 내용에 따라 다른 모습의 element를 화면에 렌더링하고 싶을때, 해당 데이터를 props에 넣어서 그 props를 컴포넌트에 전달하여 새로운 element를 반환하여 출력하는 것이다.
 
+참고로 Props 속성값을 다른 컴포넌트에서 직접 값을 할당해줄때, 문자열은 { }안에 적을 필요없이 " "안에 적어주면 된다.
+
 내가 생각하기에,
 component는 자바스크립트 함수처럼 틀로써, props라는 속성값 매개변수를 파라미터로 넣어주면, 각기 다른 element 결과가 반환되어 돌아오는것 같다.
 즉, 다른 데이터로 element의 내용을 교체하여 새로운 element를 화면에 교체하여 띄워주고 싶을때 사용하는것 같다.
@@ -134,5 +149,85 @@ component는 자바스크립트 함수처럼 틀로써, props라는 속성값 �
 
 모든 리액트 컴포넌트는 그들의 Props에 관해서는 Pure 함수 같은 역할을 해야한다.
 즉, 모든 리액트 컴포넌트는 Props를 직접 바꿀수 없고, 같은 Props에 대해서는 항상 같은 결과를 보여주어야한다.
+
+-------------------
+
+컴포넌트를 추출할땐, 재사용성이 뛰어날수있도록 기능별 단위로 추출해주는것이 좋다.
+재사용 가능한 Component를 많이 갖고 있을수록 개발 속도가 빨라진다.
+
+-------------------
+
+< CommentList.jsx > (map함수의 구조와 객체 사용법을 위주로 보면 됨.)
+import React from "react";
+import Comment from "./Comment";
+
+const alljsobjects = [
+    {
+        name: "사현진",
+        comment: "제가 만든 첫 컴포넌트입니다. 참고로 댓글입니다.",
+    },
+    {
+        name: "유재석",
+        comment: "다른 사람 이름의 다른 댓글 적어보았습니다.",
+    },
+    {
+        name: "홍길동",
+        comment: "저도 리액트 배워보고 싶어요!",
+    },
+];
+
+function CommentList(props) {
+    return (
+        <div>
+            {  // 왼쪽의 이 중괄호는, 자바스크립트 문법 사용을 위하여, 자바스크립트 코드를 작성한 코드 부분 범위를 묶기위해 사용한것이다.
+                alljsobjects.map(  // alljsobjects에 map 함수(메소드)를 실행(호출)할것이다.
+                    (onejsobject) =>  // map 메소드를 실행할 매개변수는 onejsobject 이고, 이는 alljsobjects에서 소속된 객체를 하나씩 빼서 onejsobject라는 매개변수에 넣어줄 것이다.
+                    {
+                        return (
+                            <Comment name={onejsobject.name} comment={onejsobject.comment} />
+                        );
+                    }  // 이 map 함수의 구조를 결론적으로 말하자면, map 함수의 매개변수는 onejsobject 이고, map 함수의 반환결과는 => 다음의 { } 중괄호 안의 부분이다.
+                )  // map 함수의 범위가 여기까지이므로 닫아줌.
+            }
+        </div>
+    );
+}
+
+/*
+// 아래 코드가 원래 강의 내용의 변수명인데, 변수명이 다 비슷비슷해서 개념정리하는데 헷갈릴까봐 내가 위의 코드의 변수명으로 바꾸어 적어둠.
+// 그리고 또한 위 코드에서는 map 함수의 구조가 잘 이해되지않을까봐 코드를 좀 넓게 분해해보았음.
+
+const comments = [
+    {
+        name: "사현진",
+        comment: "제가 만든 첫 컴포넌트입니다. 참고로 댓글입니다.",
+    },
+    {
+        name: "유재석",
+        comment: "다른 사람 이름의 다른 댓글 적어보았습니다.",
+    },
+    {
+        name: "홍길동",
+        comment: "저도 리액트 배워보고 싶어요!!",
+    },
+];
+
+function CommentList(props) {
+    return (
+        <div>
+            {comments.map((comment) => {
+                return (
+                    <Comment name={comment.name} comment={comment.comment} />
+                );
+            })}
+        </div>
+    );
+}
+
+*/
+
+export default CommentList;
+
+-------------------
 
 ```
