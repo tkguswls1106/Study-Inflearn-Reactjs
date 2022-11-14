@@ -278,14 +278,14 @@ this.setState({
 즉, 리액트 클래스 컴포넌트는 계속 존재하는 것이 아니라, 시간의 흐름에 따라 생성되고 업데이트 되다가 사라진다는 것이다.
 
 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-생명주기:      |             출생(Mounting)           |                  인생(Updating)                  |		           사망(Unmounting)
+생명주기:      |             출생(Mounting)           |                  인생(Updating)                   |		           사망(Unmounting)
 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 특징:         |  constructor 생성자 실행              |    New props 컴포넌트의 props 변경		      |   상위 컴포넌트에서 현재 컴포넌트들을 더이상 화면에 표시안할때 사망
              |  첫 state 정의                       |   setState() 함수 호출에 의해 state 변경		      |   사망 '직전'에 사망 생명주기 함수 호출
  	      |  렌더링되며 '이후'에 출생 생명주기 함수 호출  |    forceUpdate() 강제 업데이트 함수 호출로 다시 렌더링   |
-	      |		            		   |    렌더링 '이후' 인생 생명주기 함수 호출		      |
+	      |		            		       |    렌더링 '이후' 인생 생명주기 함수 호출		      |
 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-생명주기 함수:  |  componentDidMount 함수		   |    componentDidUpdate 함수			      |   componentWillUnmount 함수
+생명주기 함수:  |  componentDidMount 함수		      |    componentDidUpdate 함수			      |   componentWillUnmount 함수
 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
 -------------------
@@ -363,6 +363,89 @@ export default NotificationList;
 
 참고로 생명주기 함수는 요즘은 잘 쓰이지 않는 클래스 컴포넌트에서만 쓰여 흐름과정 외에는 잘 몰라도 괜찮지만,
 state(상태)는 반드시 잘 알아야만 한다.
+
+-------------------
+
+< 함수 컴포넌트의 Hooks훅 이란? >
+
+클래스 컴포넌트에서는 state와 생명주기를 사용하여 원하는 시점에 원하는 출력이나 코드를 사용할 수 있지만,
+함수 컴포넌트에서는 state와 생명주기를 사용할 수 없어, 이러한것을 대체하여 사용할 수 있게해준것이 Hooks이다.
+
+훅Hooks를 사용할때에는 앞에 use를 붙여주어야한다.
+예를들어 state를 사용하기 위한 Hook은, useState() 이다.
+그리고 생명주기 사용을 위한 Hook은, useEffect() 이다.
+
+-------------------
+
+< useState() 사용법 >
+const [변수명, set함수명] = useState(초기값);
+
+< useState() 사용법 예시 코드 >
+import React, { useState } from "react";
+
+function Counter(props) {
+    const [count, setCount] = useState(0);  // 만약 이걸 var count = 0; 이렇게 적었다면, count값은 클릭때마다 1씩 올라가긴하지만, 렌더링이 되지않아 화면에 출력값은 그대로 변하지않는다. 그래서 함수 컴포넌트에서 state를 사용하기위해 Hook훅을 사용한것이다.
+
+    return (
+        <div>
+            <p>총 {count}번 클릭했습니다.</p>
+            <button onClick={() => setCount(count + 1)}>
+                클릭
+            </button>
+        </div>
+    );
+}
+
+-------------------
+
+훅Hook 중에서 side effect라는 렌더링시 변경 시점 접근인 생명주기를 함수 컴포넌트에서 사용할 수 있도록 해주는것이 useEffect() 이다.
+주로 의존성 배열의 값이 변경될때, 이펙트 함수 부분이 실행된다.
+
+< useEffect() 사용법 >
+useEffect(이펙트 함수, 의존성 배열);  // 출생(mount)과 인생(update) 시점에, 해당 생명주기 함수와 동일한 시점에 실행된다.
+useEffect(이펙트 함수, []);  // []으로 배열이 비었으므로 의존성 배열이 변경될수 없기때문에 어떤값에도 의존하지않아, 출생(mount)과 사망(unmount) 시점에 각각 단 한번씩, 해당 생명주기 함수와 동일한 시점에 실행된다.
+useEffect(이펙트 함수);  // 의존성 배열을 생략하면 컴포넌트가 업데이트될 때마다 이펙트 함수가 호출된다. 즉, 출생(mount)과 인생(update) 시점에, 해당 생명주기 함수와 동일한 시점에 실행된다.
+
+만약 useEffect() 함수 내부에 return 문이 들어있다면, 해당 return 부분은 컴포넌트가 마운트 해제인 unmount 될때 호출된다. 즉, 사망(unmount) 시점에, 해당 생명주기 함수와 동일한 시점에 실행된다.
+참고로 return문이 없을수도 있다. 반드시 존재해야하는건 아니므로 주의하자.
+
+< useEffect() 사용법 예시 코드 >
+import React, { useState, useEffect } from "react";
+
+function Counter(props) {
+
+    ... 생략
+
+    useEffect(() => {  // 의존성 배열 생략했으므로, 처음 mount와 update 될때마다 이펙트 함수 실행함. 참고로 여긴 return문 없으므로 unmount때는 생각하지 않는다.
+        document.title = `총 ${count}번 클릭했습니다.`;  // 이펙트 함수
+    });
+
+    useEffect(() => {  // 의존성 배열 생략했고 useEffect() 내부에 return문 존재함.
+        ServerAPI.subscribeUserStatus(props.user.id, handleStatusChange);  // 이부분을 처음 mount와 update 될때마다 이펙트 함수 실행함.
+        
+        return () => {
+            ServerAPI.unsubscribeUserStatus(props.user.id, handleStatusChange);  // 이 부분은 useEffect() 내부의 return문이므로, 이 부분은 unmount때 실행된다.
+        };
+    });
+
+    ... 생략
+
+    return isOnline ? '온라인' : '오프라인';  // 이 코드줄은 위의 useEffect() 외부의 return문이므로, 생명주기와는 전혀 관계없다는걸 보여주기위해 적어본 것이다.
+}
+
+< useEffect() 사용법 구조와 설명 >
+useEffect(() => {
+    // 컴포넌트가 마운트 된 이후,
+    // 의존성 배열에 있는 변수들 중 하나라도 값이 변경되었을 때 실행됨
+    // 의존성 배열에 빈 배열[]을 넣으면 마운트와 언마운트시에 단 한 번씩만 실행됨
+    // 의존성 배열 생략 시 컴포넌트 업데이트 시마다 실행됨
+    ...
+
+    return () => {
+        // 컴포넌트가 마운트 해제되기 전에 실행됨
+        ...
+    }
+}, [의존성 변수1, 의존성 변수2, ...]);
 
 -------------------
 
