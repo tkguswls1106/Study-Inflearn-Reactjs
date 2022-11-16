@@ -449,4 +449,59 @@ useEffect(() => {
 
 -------------------
 
+< 훅Hook의 useMemo() >
+
+렌더링시 그 렌더링하는 시점에 사용된다.
+
+useMemo(() => fn, deps)
+useMemo()는 deps 가 변한다면, () => fn 이라는 함수를 실행하고, 그 함수의 반환 값을 반환한다.
+즉, 메모이제이션된 '값'을 반환한다.
+
+useMemo(() => {console.log(ex)}, [ex]);  // useMemo() 그대로 사용하기
+useMemo()는, 뒷매개변수인 의존성 배열의 값이 변하면, 앞매개변수의 함수를 실행한다.
+
+< 훅Hook의 useCallback() >
+
+렌더링시 그 렌더링하는 시점에 사용된다.
+
+useCallback(fn, deps)
+useCallback()는 deps 가 변한다면, fn 이라는 '새로운' 함수를 반환한다.
+즉, 메모이제이션된 '함수'를 반환한다.
+
+useMemo()는 그냥 함수를 실행해버리는 반면, useCallback()는 함수를 반환한다.
+
+const useCallbackReturn = useCallback(() => {console.log(why)}, [ex]);  // useCallback()이 () => {console.log(why)} 라는 함수를 반환한다.
+useCallbackReturn()  // useCallback이 담겨있는 함수를 실행한다. 즉, 새로운 함수를 만들어준것이다.
+
+< 위의 useMemo()와 useCallback()의 더 자세한 설명 >
+사이트 링크 참고: https://basemenks.tistory.com/238
+
+-------------------
+
+< 훅Hook의 useRef()와, callback ref 방법과 focus()와 ref에 대하여 >
+
+사용법: const refContainer = useRef(초기값);
+
+마치 전역변수와 c언어의 포인터처럼 값을 DOM요소에 접근하여 reference참조하여
+렌더링될때마다 함수실행으로 원래의 초기값으로 다시 돌아가 초기화되어버리지않게 해준다.
+즉, useRef() 사용한 변수의 current의 경우, 마운트될때 초기화된 상태에서 그대로 값을 유지하다가
+값이 업데이트 되면서 렌더링되어 함수가 계속 재실행될때, 값의 초기상태 복귀없이 그대로 값을 변동하고 업데이트하여 갖고있는다.
+
+참고로 const inputRef = useRef(null); 처럼 선언해주는데, 아마 inputRef는 자바스크립트객체일것이다. 뭐 의미는 변수처럼 봐도 아마 무방할듯하다.
+
+더 자세한 설명은 사이트 링크 참고: https://itprogramming119.tistory.com/entry/React-useRef-%EC%82%AC%EC%9A%A9%EB%B2%95-%EB%B0%8F-%EC%98%88%EC%A0%9C
+위의 사이트 코드중에서
+focus()가 적힌 inputRef.current.focus();의 의미는, ref={inputRef}라고 적혀있는 태그 부분에 키보드 커서를 자동으로 이동시켜준다.
+그러므로, 사이트가 첫 렌더링 되면 ref={inputRef}라고 적혀있는 input태그 글상자에 키보드 커서가 자동으로 타겟팅된다.
+그리고 input ref의 ref의 의미는, html에서 id값을 지정하는것처럼 비슷하게 위치를 이름으로 지정해주는 것이다. 또한 내생각엔 아마 값도 전달해주는 역할도 하는것같다.
+input ref에서 input함수로 만들어진 글상자에 값을 적어서 버튼을 클릭하면, 그 값을 가지고 loginAlert 함수가 실행된다.
+
+useRef() 사용은, .current 프로퍼티값을 변경해도 리렌더링이 일어나지 않아 컴포넌트에서 인지를 하지못해서 변경되었는지 확인하기가 어렵다.
+그럴때는 callback ref 방법을 사용하면 된다.
+훅의 useCallback() 을 사용하여 함수를 반환하여 새로운 함수를 만들고, 그 새로운 함수를 특정html태그의 ref={}안에 넣어주면,
+예시로 자식 컴포넌트가 바뀌었을때 알림을 받을 수 있다. 이를 통해 다른 정보들을 업데이트 할 수 있다.
+참고할만한 사이트: https://leehwarang.github.io/2020/11/29/ref.html
+
+-------------------
+
 ```
