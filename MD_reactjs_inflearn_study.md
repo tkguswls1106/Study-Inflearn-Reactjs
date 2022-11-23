@@ -447,6 +447,16 @@ useEffect(() => {
     }
 }, [의존성 변수1, 의존성 변수2, ...]);
 
+<<< 위의 내용이 애매해서 구글링기준과 내기준으로 useEffect() 사용법을 한번더 적어보겠음. >>>
+useEffect(이펙트 함수, 의존성 배열);  // 출생(mount)과, '의존성 배열의 요소 값 변경'시 인생(update) 시점에 실행.
+useEffect(이펙트 함수, []);  // 출생(mount) 시점에만 실행.
+useEffect(이펙트 함수);  // 출생(mount)과, '함수 컴포넌트 리렌더링'시 인생(update) 시점에 실행.
+useEffect() 함수 내부의 return 문  // 해당 return 부분은 컴포넌트가 마운트 해제인 사망(unmount) 시점에 실행.
+// 참고로 대표적인 3가지 리렌더링의 조건으로는,
+// 1. 컴포넌트의 state가 변했을때 (예를들어 useState() 적용한 set함수의 변수값이 변경되었을때)
+// 2. props의 값이 변했을때
+// 3. 부모 컴포넌트가 렌더링 되었을때
+
 -------------------
 
 < 훅Hook의 useMemo() >
@@ -527,6 +537,54 @@ useRef() 사용은, .current 프로퍼티값을 변경해도 리렌더링이 일
 참고로 예를들어 두 함수 컴포넌트의 중복부분을 커스텀 훅으로 생성하여 적용하였고 그 커스텀 훅 안에 state와 effect가 들어있다면,
 그 각각의 함수 컴포넌트 1,2들은 같은 커스텀 훅을 호출하여 사용하긴했지만 각각 state와 effect는 분리되어 작동하고 적용된다.
 뿐만아니라, 하나의 함수 컴포넌트에서 같은 커스텀 훅을 여러번 호출하여도, 커스텀 훅의 호출들도 모두 각각 완전히 독립적이다.
+
+-------------------
+
+< chapter_07 / Accommodate.jsx >
+(Custom Hook 사용, useEffect() 종류별 호출 생명주기 순서와 그 이유 주석 설명 위주로 보면 됨.)
+
+import React, { useState, useEffect } from "react";
+import useCounter from "./useCounter";
+
+const MAX_CAPACITY = 10;
+
+function Accommodate(props) {
+    const [isFull, setIsFull] = useState(false);
+    const [count, increaseCount, decreaseCount] = useCounter(0);  // Custom Hook 호출함.
+
+    useEffect(() => {  // 위에꺼 useEffect() 훅
+        console.log("======================");
+        console.log("useEffect() is called.");
+        console.log(`isFull: ${isFull}`);
+    });  // 의존성 배열이 없는 useEffect()  // 출생(mount)과, 함수 컴포넌트 렌더링시 인생(update)때 실행됨.
+    // count값을 10까지 늘리고 나면, 위아래 useEffect() 훅을 전부 isFull=false값 기준으로 둘다 모두 출력후,
+    // 밑에꺼 useEffect()의 setIsFull(count >= MAX_CAPACITY);로 인하여, isFull=false 에서 true로 바뀌었기에, 리렌더링의 조건중 하나인 '컴포넌트의 state가 변했을 때'를 만족하여
+    // count=10값은 유지한채로 컴포넌트가 렌더링되고, 그렇기 때문에
+    // count값은 변하지않아 밑에꺼 useEffect() 는 실행되지 않고, 이 useEffect() 훅만 한번더 isFull=true값 기준으로 실행된다.
+    // count값을 10에서 9로 줄일때에도 마찬가지의 이유로, 위아래 useEffect() 훅을 전부 isFull=true값 기준으로 둘다 모두 출력후, 밑에꺼 useEffect() 말고 이 useEffect() 훅만 한번더 isFull=false값 기준으로 실행된다.
+
+    useEffect(() => {  // 밑에꺼 useEffect() 훅
+        setIsFull(count >= MAX_CAPACITY);  // isFull = boolean(조건 count >= MAX_CAPACITY) 이라는 의미이다.
+        console.log(`Current count value: ${count}`);
+    }, [count]);  // 의존성 배열이 있는 useEffect()  // 출생(mount)과, 의존성 배열 업데이트인 인생(update)때 실행됨.
+    // count값을 10까지 늘리고 나면, 위아래 useEffect() 훅을 전부 isFull=false값 기준으로 둘다 모두 출력후, 더이상 의존성 배열의 count값이 변화되지 않기에, 이 useEffect() 훅 말고, 저 위의 useEffect() 훅만 한번더 isFull=true값 기준으로 실행된다.
+    // count값을 10에서 9로 줄일때에도 마찬가지의 이유로, 위아래 useEffect() 훅을 전부 isFull=true값 기준으로 둘다 모두 출력후, 이 useEffect() 말고, 저 위의 useEffect() 훅만 한번더 isFull=false값 기준으로 실행된다.
+
+    return (
+        <div style={{ padding: 16 }}>
+            <p>{`총 ${count}명 수용했습니다.`}</p>
+
+            <button onClick={increaseCount} disabled={isFull}>
+                입장
+            </button>
+            <button onClick={decreaseCount}>퇴장</button>
+
+            {isFull && <p style={{ color: "red" }}>정원이 가득찼습니다.</p>}
+        </div>
+    );
+}
+
+export default Accommodate;
 
 -------------------
 
