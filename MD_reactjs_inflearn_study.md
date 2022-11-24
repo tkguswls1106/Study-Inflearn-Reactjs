@@ -588,4 +588,118 @@ export default Accommodate;
 
 -------------------
 
+< Event >
+
+Dom의 Event의 예시는,
+onclick="activate()"  // 소문자 c에, 문자열 함수 전달
+
+리액트의 Eevnt의 예시는,
+onClick={activate}  // 대문자 C에, 함수 그대로 전달 => 대문자는 camelCase라고해서 카멜 표기법이라고 부른다.
+
+Event Handler란,
+어떤 사건이 발생하면, 사건을 처리하는 역할이다.
+이는 Event Listener이라고도 부른다.
+
+< 클래스 컴포넌트에서의 바인딩(bind) >
+
+'자바스크립트에서의 바인딩(bind) & 리액트에서의 바인딩(bind)' & 바인딩 없이 화살표 함수 작성 방법으로 사용하는법  // 설명은 인터넷 사이트 링크 참고하기.
+: https://jeong-pro.tistory.com/79
+
+바인딩 없이 사용방법  // 설명은 인터넷 사이트 링크 참고하기.
+: https://melthleeth.tistory.com/entry/React-Class-Method%EC%99%80-Arrow-Function
+: https://dev.to/guin/learn-public-class-field-syntax-by-refactoring-a-react-component-njh
+
+// 클래스 컴포넌트에서 이벤트 사용시, 바인딩 방법
+// : 클래스 컴포넌트의 생성자 메소드인 constructor 메소드 안에서 바인딩(bind)해준다.
+class App extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+              hidden: false,
+        };
+        this.update = this.update.bind(this);  // 바인딩
+    }
+    update() {
+        this.setState({
+            hidden: true
+        });
+    }
+ 
+    render() {
+        return <div
+            onClick={ this.update }
+        />;
+    }
+}
+
+// 클래스 컴포넌트에서 이벤트 사용시, 바인딩 직접 사용안하고 바인딩 시키는 방법
+// : class field syntax 방법을 사용하여 생성자 메소드인 constructor 메소드를 선언하지않고,
+//    바로 핸들러메소드를 화살표 함수 작성 방법(arrow function)으로 만들어주면 된다.
+class MyButton extends React.Component {
+    handleClick = () => {
+        console.log('this is:', this);
+        // this.setState(() => ({ hidden: true })); 참고로 이건 참고하라고 아무거나 추가로 적은 코드임.
+    }
+    render() {
+        return (
+            <button onClick={this.handleClick}>
+                클릭
+            </button>
+        );
+    }
+}
+
+< 함수 컴포넌트에서의 이벤트를 정의하는 방법 >
+
+function Toggle(props) {
+    const [isToggleOn, setIsToggleOn] = useState(true);
+
+    // 방법 1. 함수 안에 함수로 정의
+    function handleClick() {
+        setIsToggleOn((isToggleOn) => !isToggleOn);
+    }
+
+    // 방법 2. arrow function을 사용하여 정의    
+    const handleClick = () => {
+        setIsToggleOn((isToggleOn) => !isToggleOn);
+    }
+
+    return (
+        <button onClick={handleClick}>  // 함수 컴포넌트에서는 클래스 컴포넌트와는 다르게, 이벤트 함수 호출할때 this.를 사용하지 않는다.
+            {isToggleOn ? "켜짐" : "꺼짐"}
+        </button>
+    );
+}        
+
+< 클래스 컴포넌트에서의 전달할 데이터를 매개변수(파라미터)로 이벤트 핸들러에 전달하는법 >
+
+// 화살표 함수 방법
+<button onClick={(event) => this.deleteItem(id, event)}>삭제하기</button>
+
+// 일반 바인딩 방법
+<button onClick={this.deleteItem.bind(this, id)}>삭제하기</button>
+
+두 경우 모두 React 이벤트를 나타내는 event 인자가 ID 뒤에 두 번째 인자로 전달된다.
+화살표 함수를 사용하는 방법이면, 명시적으로 직접 event 인자를 전달해야 하지만,
+bind를 사용하는 방법이면, event를 인자로 따로 직접 적어줄필요없이 추가 인자가 자동으로 전달된다. 즉, 자동으로 {this.deleteItem.bind(this, id, event)} 이렇게 된다는 것이다.
+
+단, 어차피 클래스 컴포넌트는 이제 잘 사용하지 않는 추세이니, 잘 알지 못해도 괜찮다고 한다.
+함수 컴포넌트를 유심히 보자.
+
+< 함수 컴포넌트에서의 전달할 데이터를 매개변수(파라미터)로 이벤트 핸들러에 전달하는법 >
+
+function MyButton(props) {
+    const handleDelete = (id, event) => {
+        console.log(id, event.target);
+    );
+
+    return (
+        <button onClick={(event) => handleDelete(1, event)}
+            삭제하기
+        </button>
+    );
+}
+
+-------------------
+
 ```
