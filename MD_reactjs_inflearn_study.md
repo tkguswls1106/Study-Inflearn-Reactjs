@@ -633,9 +633,16 @@ class App extends React.Component {
 }
 
 // 클래스 컴포넌트에서 이벤트 사용시, 바인딩 직접 사용안하고 바인딩 시키는 방법
-// : class field syntax 방법을 사용하여 생성자 메소드인 constructor 메소드를 선언하지않고,
+// : class field syntax 방법을 사용하여, 생성자 메소드인 constructor 메소드 안에
+//    this.handleClick = this.handleClick.bind(this);같은 바인딩 함수 코드를 제외하고, super(props);와 this.state = {}; 같은 초기설정 코드만 적어준채로,
 //    바로 핸들러메소드를 화살표 함수 작성 방법(arrow function)으로 만들어주면 된다.
 class MyButton extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+              hidden: false,
+        };
+    }
     handleClick = () => {
         console.log('this is:', this);
         // this.setState(() => ({ hidden: true })); 참고로 이건 참고하라고 아무거나 추가로 적은 코드임.
@@ -699,6 +706,60 @@ function MyButton(props) {
         </button>
     );
 }
+
+-------------------
+
+< 헷갈릴수 있는것 >
+
+함수 컴포넌트에서 사용:
+useState 같은 훅
+useEffect 같은 훅
+
+클래스 컴포넌트에서 사용:
+setState
+componentDidUpdate 같은 생명주기 함수
+
+-------------------
+
+< 번외: prevState란? >
+
+리액트에서는 prevState 라는 개념이 있다.
+setState로 상태 값을 여러번 변경 하려고 할때마다 즉각적으로 state 에 변경된 상태값을 적용시키지 않는다.
+리액트는 상태값이 변경 될 때 마다 렌더링을 시켜주는데, 매번 상태값을 즉각적으로 변경시킬때 마다 렌더링이 된다면 매우 비효율적이다.
+따라서 setState으로 미리 변경된 상태값을 바로 땡겨와서 변경될 state에 적용시키는 방법이 있다.
+PrevState 개념을 사용하면 편리하다.
+
+const onClickCount = () => {
+    setCount(count + 1);
+    setCount(count + 1);
+    setCount(count + 1);
+    setCount(count + 1);
+  };
+이렇게만 하면, 
+위 코드에서 처럼 여러번 setCount(count+1)을 해주었을때 현재 count 는 정상적으로 증가를 하지 않는다.
+setCount 가 여러번 실행되면서 카운트가 누적되는것 처럼 보이지만, 실질적으로는 setCount로 1증가 하고 다시 setCount로 1증가 이런식으로 흐름이 진행됨으로 실질적으로 count 에는 1만 증가되는 현상이 있다.
+
+const onClickCount = () => {
+    // setState에서 상태값을 변경 시킬때 곧장 바로 변경될 수가 없음
+    // state는 이전 상태값을 계속해서 가지고 있을 뿐 함수가 전부 실행되기 전까지는 렌더링을 하지 않음으로 카운트가 올라가지 않음
+    // 따라서 콜백을 이용해서 이전 상태값을 가져와서 사용이 가능하다.
+    setCount((count) => count + 1);
+    setCount((count) => count + 1);
+    setCount((count) => count + 1);
+    setCount((count) => count + 1);
+  };
+(()=>S) 처럼 이전에 가지고 있는 상태 값을 가져다가 다음 상태 값으로 덮어 씌우기를 할 수 있다.
+이러한 방법을 통해서 이전 상태값과 변경될 상태값을 가지고 state를 즉각적으로 변경 시킬수 있다.
+마치 c언어에서 num = 1 만 반복 선언하다가, num = num + 1 로 바꿔 선언한 느낌이랄까?
+
+결론적으로말하자면, setState 함수 사용 시 이전 state 값을 사용하고 싶으면 prevState를 이용하면 된다.
+밑은 그의 예시이다.
+    handleConfirm() {
+        this.setState((prevState) => ({
+            isConfirmed: !prevState.isConfirmed,
+        }));
+    }
+이벤트 핸들러로 handleConfirm()가 실행되면, 이전의 state를 불러와 !로 반전시키고 그걸 state로 덮어씌우는것이다.
 
 -------------------
 
