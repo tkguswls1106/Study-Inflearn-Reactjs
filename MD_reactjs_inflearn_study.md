@@ -594,7 +594,7 @@ export default Accommodate;
 Dom의 Event의 예시는,
 onclick="activate()"  // 소문자 c이며, 문자열 함수 전달
 
-리액트의 Eevnt의 예시는,
+리액트의 Event의 예시는,
 onClick={activate}  // 대문자 C이며, 함수 그대로 전달 => 대문자는 camelCase라고해서 카멜 표기법이라고 부른다.
 
 Event Handler란,
@@ -763,6 +763,44 @@ const onClickCount = () => {
         }));
     }
 이벤트 핸들러로 handleConfirm()가 실행되면, 이전의 state를 불러와 !로 반전시키고 그걸 state로 덮어씌우는것이다.
+
+-------------------
+
+< 밑의 이것들에 대한 예시로, 설명관련 사진자료 파일에 첨부해두었음. >
+
+Conditional Rendering(컨디셔널 렌더링): 조건에 따른 렌더링 (조건부 렌더링)
+=> 어떠한 조건(프로그래밍의 조건문처럼 True와 False로 나오는 결과)에 따라서 렌더링이 달라지는 것을 의미한다.
+
+아마 컨디셔널 렌더링에는 '일반적인 if-else문 사용 방법'과, 'Inline If 방식으로 &&연산자 사용 방법'과, 'Inline If-Else 방식으로 ?연산자 사용 방법'이 존재하는것같다.
+
+Component 렌더링 막기: 만약 return된 값이 null일 경우, 해당 컴포넌트의 렌더링을 막고 결국 출력자체를 아예 배제시켜 못하게 할 수 있다.
+
+Element Variables(엘리먼트 변수): 렌더링해야될 컴포넌트를 변수처럼 다루고 싶을때, 리액트의 엘리먼트를 변수처럼 다루는 방법이다.
+
+Inline Conditions: 조건문을 분리해서 따로 작성하지않고 필요한 코드 안에 집어넣는 것.
+이에는 'Inline If 방법'과 'Inline If-Else 방법'이 존재한다.
+
+Inline If: If문의 경우 && 연산자를 사용한다. {condition && expression}인, {A && B}의 형태로써, 보통 A는 조건관련코드(condition)를 넣어주고 B는 출력하고싶은코드(expression)를 넣어준다.
+만약 A && B 에서 조건A가 true(truthy)이면, B를 반환하여 출력함.
+만약 A && B 에서 조건A가 false(falsy)이면, A만보고 B는 쳐다도안보게되어 B를 출력하지 않음. 단, 주의해야할점은 이경우에 A의 반환값을 출력한다.
+
+Inline If-Else: ?연산자인 삼항연산자를 사용한다. {condition ? true일때expression : false일때expression}의 형태이다.
+
+< truthy >
+true
+{}  // empty object
+[]  // empty array
+42  // number, not zero
+"0", "false"  // string, not empty
+
+< falsy >
+false
+0, -0  // zero, minus zero
+0n  // BigInt zero
+'', "", ``  // empty string
+null
+undefined
+NaN  // not a number
 
 -------------------
 
