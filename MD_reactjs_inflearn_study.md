@@ -781,19 +781,19 @@ Inline Conditions: 조건문을 분리해서 따로 작성하지않고 필요한
 이에는 'Inline If 방법'과 'Inline If-Else 방법'이 존재한다.
 
 Inline If: If문의 경우 && 연산자를 사용한다. {condition && expression}인, {A && B}의 형태로써, 보통 A는 조건관련코드(condition)를 넣어주고 B는 출력하고싶은코드(expression)를 넣어준다.
-만약 A && B 에서 조건A가 true(truthy)이면, B를 반환하여 출력함.
-만약 A && B 에서 조건A가 false(falsy)이면, A만보고 B는 쳐다도안보게되어 B를 출력하지 않음. 단, 주의해야할점은 이경우에 A의 반환값을 출력한다.
+만약 A && B 에서 조건A가 true이면, B를 반환하여 출력함.
+만약 A && B 에서 조건A가 false이면, A만보고 B는 쳐다도안보게되어 B를 출력하지 않음. !!! 단, 주의해야할점은 이경우에 A의 반환값을 falsy 표현식으로 표현함. 만약 false가 0이면 falsy 표현식중 0을 출력하고, 만약 falsy 표현식 중에서 null, false, undefined 가 렌더링되는 경우라면 출력자체를하지않아 아무것도 나타내지 않는다. !!!
 
 Inline If-Else: ?연산자인 삼항연산자를 사용한다. {condition ? true일때expression : false일때expression}의 형태이다.
 
-< truthy >
+< truthy 표현식 >
 true
 {}  // empty object
 []  // empty array
 42  // number, not zero
 "0", "false"  // string, not empty
 
-< falsy >
+< falsy 표현식 >
 false
 0, -0  // zero, minus zero
 0n  // BigInt zero
