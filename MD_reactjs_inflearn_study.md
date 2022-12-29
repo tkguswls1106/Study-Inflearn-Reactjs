@@ -771,7 +771,7 @@ const onClickCount = () => {
 Conditional Rendering(컨디셔널 렌더링): 조건에 따른 렌더링 (조건부 렌더링)
 => 어떠한 조건(프로그래밍의 조건문처럼 True와 False로 나오는 결과)에 따라서 렌더링이 달라지는 것을 의미한다.
 
-아마 컨디셔널 렌더링에는 '일반적인 if-else문 사용 방법'과, 'Inline If 방식으로 &&연산자 사용 방법'과, 'Inline If-Else 방식으로 ?연산자 사용 방법'이 존재하는것같다.
+아마 컨디셔널 렌더링에는 '일반적인 if-else문 사용 방법'과, 'Inline If 방식으로 &&연산자 사용 방법'과, 'Inline If-Else 방식으로 ?삼항연산자 사용 방법'이 존재하는것같다.
 
 Component 렌더링 막기: 만약 return된 값이 null일 경우, 해당 컴포넌트의 렌더링을 막고 결국 출력자체를 아예 배제시켜 못하게 할 수 있다.
 
@@ -785,6 +785,18 @@ Inline If: If문의 경우 && 연산자를 사용한다. {condition && expressio
 만약 A && B 에서 조건A가 false이면, A만보고 B는 쳐다도안보게되어 B를 출력하지 않음. !!! 단, 주의해야할점은 이경우에 A의 반환값을 falsy 표현식으로 표현함. 만약 false가 0이면 falsy 표현식중 0을 출력하고, 만약 falsy 표현식 중에서 null, false, undefined 가 렌더링되는 경우라면 출력자체를하지않아 아무것도 나타내지 않는다. !!!
 
 Inline If-Else: ?연산자인 삼항연산자를 사용한다. {condition ? true일때expression : false일때expression}의 형태이다.
+
+null의 다른 예시로,
+function Hello({ color, name, isSpecial }) {
+  return (
+    <div style={{ color }}>
+      { isSpecial ? <b>Hello</b> : null }
+      안녕하세요 {name}
+    </div>
+  );
+}
+// isSpecial 값이 true 라면 <b>Hello</b> 를, 그렇지 않다면 null 을 보여주도록 했다. 참고로 JSX 에서 null, false, undefined 를 렌더링하게 된다면 아무것도 나타나지 않게 된다.
+// 다만, { isSpecial ? null : <b>Hello</b> } 이거는 어떻게될지 확인을 아직 해보지 못했다. 그리고 또한 이게 truthy 표현식과 falsy 표현식 모두 영향을 받을지에 관해서도 아직 확인해보지 못했다.
 
 < truthy 표현식 >
 true
@@ -801,6 +813,13 @@ false
 null
 undefined
 NaN  // not a number
+
+< 가독성 좋게 범위를 설명 >
+
+			    / 번외: Element Variables, Component 렌더링 막기
+Conditional Rendering -- 일반적인 if-else문 사용 방법
+			    \ Inline Conditions -- Inline If 방법: &&연산자 사용하고 condition이 false인경우 falsy 표현식 출력 주의하기
+							\ Inline If-Else 방법: ?삼항연산자 사용
 
 -------------------
 
