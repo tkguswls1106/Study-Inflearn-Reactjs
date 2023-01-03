@@ -823,4 +823,117 @@ Conditional Rendering -- 일반적인 if-else문 사용 방법
 
 -------------------
 
+< 리스트와 map 예시 >
+
+const numbers = [1, 2, 3, 4, 5];
+const listItems = numbers.map((number) =>
+  <li>{number}</li>
+);
+
+ReactDOM.render(
+  <ul>{number}</ul>,
+  document.getElementById('root')
+);
+
+이러면 최종적으로 렌더링 되는 코드는
+
+ReactDOM.render(
+  <ul>
+    <li>{1}</li>
+    <li>{2}</li>
+    <li>{3}</li>
+    <li>{4}</li>
+    <li>{5}</li>
+  <ul>,
+  document.getElementById('root')
+);
+
+이다.
+
+< 내가 개인적으로 추천할 map 코드 방식 1 >
+
+function NumberList(props) {
+  const numbers = props.numbers;  // 또는 const { numbers } = props;
+
+  const listItems = numbers.map((number) =>
+    <li>{number}</li>
+  );
+
+  return (
+    <ul>{listItems}</ul>
+  );
+}
+
+const numberslliisstt = [1, 2, 3, 4, 5];
+ReactDOM.render(
+  <NumberList
+    numbers={numberslliisstt}
+    // key={numberslliisstt.toString()} 이것처럼 key값도 넣어줘야 warning이 안뜬다.
+  />,
+  document.getElementById('root')
+);
+
+< 내가 개인적으로 추천할 map 코드 방식 2 >
+
+function NumberList(props) {
+  const numbers = props.numbers;  // 또는 const { numbers } = props;
+
+  return (
+    <ul>
+      {
+        numbers.map( (number) =>
+          {
+            return (
+              <li>{number}</li>
+            );  // 이 return 세줄을 return <li>{number}</li>; 로도 사용이 가능하다.
+          }
+        )
+      }
+    </ul>
+  );
+}
+
+const numberslliisstt = [1, 2, 3, 4, 5];
+ReactDOM.render(
+  <NumberList
+    numbers={numberslliisstt}
+    // key={numberslliisstt.toString()} 이것처럼 key값도 넣어줘야 warning이 안뜬다.
+  />,
+  document.getElementById('root')
+);
+
+< map 과 key값 >
+
+key는 꼭 태그 안에 적어주어야한다.
+const listItems = numbers.map((number) =>
+  <li key={~~}>
+    {number}
+  </li>
+);
+이러한 식으로 추후에 map을 사용한 numbers로 키key값을 가져와 부여할때, 가능한 방식들로는
+
+스트링으로 바꿔 부여하는걸 권장하여(필수는 아님)
+<li key={number.toString()}>  // 근데 참고로 이건 number값이 전부 각기다른 고유의 값이란게 확신되어야만 쓸수있다.
+  {number}
+</li>
+
+또는
+
+만약 고유한 id값이 속성으로 첨부되어있다면
+<li key={number.id}>
+  {number}
+</li>
+
+또는
+
+map을 사용할때 numbers.map((number, index) => ~~) 이런식으로 뒷부분에 index를 적어준다면
+정안되면 이를 이용하여 최후의 수단으로 
+<li key={index}>  // 이 index는 배열내에서 현재 아이템의 인덱스를 의미한다.
+  {number}
+</li>
+
+이렇게 사용하면 된다.
+
+-------------------
+
 ```
