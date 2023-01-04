@@ -938,12 +938,12 @@ map을 사용할때 numbers.map((number, index) => ~~) 이런식으로 뒷부분
 
 < Controlled Components >
 
-Controlled Components: 사용자가 폼 양식에 입력한 데이터값을 직접 제어할 수 있다.
+Controlled Components: 제어 컴포넌트 이다. 사용자가 폼form 양식에 입력한 데이터값을 직접 제어할 수 있다.
 즉, 값이 리액트의 통제를 받는 Input Form Element 인것이다.
 이는 모든 데이터를 state로 관리할 수 있다.
-클래스 컴포넌트에선 setstate로, 함수 컴포넌트에선 usestate 훅으로 말이다.
+클래스 컴포넌트에선 setState로, 함수 컴포넌트에선 useState 훅으로 말이다.
 
-< 함수 컴포넌트에서의 'arrow function 방법으로 이벤트 정의함 + form과 Controlled Components 사용' 예시 코드 >
+< 함수 컴포넌트에서의 'arrow function 방법으로 이벤트 정의함 + form과 Controlled Components 사용법' 예시 코드 >
 
 function NameForm(props) {
   const [value, setValue] = useState('');
@@ -968,7 +968,7 @@ function NameForm(props) {
   )
 }
 
-< 클래스 컴포넌트에서의 '생성자메소드로 직접 바인딩하는 방법 사용함 + 이벤트 사용법 + form과 Controlled Components 사용' 예시 코드 >
+< 클래스 컴포넌트에서의 '생성자메소드로 직접 바인딩하는 방법 사용함 + 이벤트 사용법 + form과 Controlled Components 사용법' 예시 코드 >
 
 class NameForm extends React.Component {
   constructor(props) {
@@ -1000,6 +1000,79 @@ class NameForm extends React.Component {
     );
   }
 }
+
+-------------------
+
+< '일반적인 HTML 에서의 textarea 태그' vs '리액트 에서의 textarea 태그' >
+
+일반적인 HTML 에서의 textarea 태그는
+<textarea>가나다</textarea> 이렇게 사용하지만,
+
+리액트 에서의 textarea 태그는 form과 Controlled Components 사용을 위하여
+<input type="text" value={value} onChange={handleChange} />와 용도는 유사하되 input태그에서 type="text"를 제외하고
+<textarea value={value} onChange={this.handleChange} /> 이렇게 사용한다.
+
+< 일반적인 HTML 에서의 select 태그 vs 리액트 에서의 select 태그 >
+
+참고로 일반적인 HTML에서 option selected value로 적어둔것이 초기값으로 미리 선택하여 보여줄 선택항목이다.
+
+참고로 아마 리액트?에서 select 태그에 multiple 옵션을 허용한다면 value 어트리뷰트에 배열을 전달할 수 있다.
+<select multiple={true} value={['B', 'C']}>
+이런식으로 작성해주면 된다.
+
+나머지 비교자료는 예시로, 설명관련 사진자료 파일에 첨부해두었음.
+
+< '클래스 컴포넌트 vs 함수 컴포넌트' 에서의 form의 여러 state 데이터 관리 차이 >
+
+클래스 컴포넌트에서는 setState 하나로 모든 state값들을 업데이트하였지만,
+함수 컴포넌트에서는 각 useState로 만들어준 각각의 set함수 변수마다 state가 따로 존재하기때문에 각각의 set함수로 분리되어 여러 state 데이터를 따로따로 관리가 가능하다.
+이 예시중 함수 컴포넌트의 예시는 설명관련 사진자료 파일에 첨부해두었음.
+
+-------------------
+
+< chapter_11 / SignUp.jsx >
+(함수 컴포넌트에서의 'arrow function 방법으로 이벤트 정의함 + form과 Controlled Components 사용법 + 리액트에서의 select 태그 + form의 여러 state 데이터 관리' 예시 코드임.)
+(참고로 label 태그에 대한 설명은 MD_html_css_js_study 파일에서 찾아볼것.)
+
+import React, { useState } from "react";
+
+function SignUp(props) {
+    const [name, setName] = useState("");
+    const [gender, setGender] = useState("남자");
+
+    const handleChangeName = (event) => {
+        setName(event.target.value);
+    };
+
+    const handleChangeGender = (event) => {
+        setGender(event.target.value);
+    };
+
+    const handleSubmit = (event) => {
+        alert(`이름: ${name}, 성별: ${gender}`);
+        event.preventDefault();
+    };
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <label>
+                이름:
+                <input type="text" value={name} onChange={handleChangeName} />
+            </label>
+            <br />
+            <label>
+                성별:
+                <select value={gender} onChange={handleChangeGender}>
+                    <option value="남자">남자</option>
+                    <option value="여자">여자</option>
+                </select>
+            </label>
+            <button type="submit">제출</button>
+        </form>
+    );
+}
+
+export default SignUp;
 
 -------------------
 
