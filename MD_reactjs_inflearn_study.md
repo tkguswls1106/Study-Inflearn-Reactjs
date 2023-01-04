@@ -936,4 +936,71 @@ map을 사용할때 numbers.map((number, index) => ~~) 이런식으로 뒷부분
 
 -------------------
 
+< Controlled Components >
+
+Controlled Components: 사용자가 폼 양식에 입력한 데이터값을 직접 제어할 수 있다.
+즉, 값이 리액트의 통제를 받는 Input Form Element 인것이다.
+이는 모든 데이터를 state로 관리할 수 있다.
+클래스 컴포넌트에선 setstate로, 함수 컴포넌트에선 usestate 훅으로 말이다.
+
+< 함수 컴포넌트에서의 'arrow function 방법으로 이벤트 정의함 + form과 Controlled Components 사용' 예시 코드 >
+
+function NameForm(props) {
+  const [value, setValue] = useState('');
+
+  const handleChange = (event) => {
+    setValue(event.target.value);  // 만약 이를 응용하여 모든 입력값을 대문자로 변경하는 코드를 작성하고싶다면, setValue(event.target.value.toUpperCase()); 로 적어주면 된다.
+  }
+
+  const handleSubmit = (event) => {
+    alert('입력 제출한 이름: ' + value);
+    event.preventDefault();  // a 태그나 submit 태그는 누르게 되면 href를 통해 이동하거나 창이 새로고침하여 실행되는데, 이를 막아주는 역할의 메소드가 preventDefault이다.
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>
+        이름:
+        <input type="text" value={value} onChange={handleChange} />
+      </label>
+      <button type="submit">제출</button>
+    </form>
+  )
+}
+
+< 클래스 컴포넌트에서의 '생성자메소드로 직접 바인딩하는 방법 사용함 + 이벤트 사용법 + form과 Controlled Components 사용' 예시 코드 >
+
+class NameForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: ''};
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
+
+  handleSubmit(event) {
+    alert('입력 제출한 이름: ' + this.state.value);
+    event.preventDefault();  // a 태그나 submit 태그는 누르게 되면 href를 통해 이동하거나 창이 새로고침하여 실행되는데, 이를 막아주는 역할의 메소드가 preventDefault이다.
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          이름:
+          <input type="text" value={this.state.value} onChange={this.handleChange} />
+        </label>
+        <button type="submit">제출</button>
+      </form>
+    );
+  }
+}
+
+-------------------
+
 ```
