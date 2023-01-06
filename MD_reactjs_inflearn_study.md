@@ -32,6 +32,44 @@ https://velog.io/@marcus/2019-02-10-1702-%EC%9E%91%EC%84%B1%EB%90%A8
 
 -------------------
 
+자바스크립트에서의 객체와 배열 설명 참고 사이트:
+https://www.zerocho.com/category/JavaScript/post/572c6f759a5f1c4db2481ee3
+
+배열은 선언할때 [] 사용.
+객체는 선언할때 {} 사용.
+
+객체 예시로
+var hello = {
+  firstName: 'Zero',  // 'firstName': 'Zero' 도 가능함. 그러면 호출할때 hello['firstName']과 hello.firstName 모두 가능함. 키에 띄어쓰기 없으면 웬만하면 마침표 방법으로 호출함.
+  lastName: 'Cho',  // 'lastName': 'Zero' 도 가능함. 그러면 호출할때 hello['lastName']과 hello.lastName 모두 가능함. 키에 띄어쓰기 없으면 웬만하면 마침표 방법으로 호출함.
+  'other Name': 'shj'  // 키에 띄어쓰기 있으므로 other Name: 'shj' 은 불가능함. 그러면 호출할때 hello['other Name'] 으로만 가능함. 마침표 호출방법은 불가능함.
+};
+
+단, 만약 props. 같은 말이 추가로 붙어있다면 []이걸로 호출하자.
+예시로
+hello[props.whatchoose] 이렇게 말이다.
+hello.props.whatchoose 는 불가능하다.
+
+map메소드는 배열에서 사용하므로, 이를 응용하면
+배열 안의 각 인덱스에 속해있는 객체를 꺼내 사용할 수 있다.
+예시로
+const students = [
+    {
+        id: 1,
+        name: "Inje",
+    },
+    {
+        id: 2,
+        name: "Steve",
+    },
+];
+이처럼 배열[]안에 객체{}가 들어있다면, 배열student를 map메소드로 돌려 각 객체를 뽑아 사용 가능하다. 그 예시로
+students.map( (student) => {return <li key={student.id}>{student.name}</li>;} )
+이런식으로 말이다.
+꼭 괄호생김새를 잘 구분하자.
+
+-------------------
+
 a === b
 (a가 b와 값과 자료형이 모두 같다)
 // 만약 a=1, b='1'인데 a==b를 출력하면 true가 나오고, a===b를 출력하면 false가 나온다.
