@@ -1176,6 +1176,94 @@ props를 통해 전달 전달 전달 이렇게 연속적으로 쭉 내려가며 
 이는 context를 이용하면, 트리 단계마다 명시적으로 props를 넘겨주지 않아도 많은 컴포넌트가 이러한 값을 공유하도록 할 수 있다.
 context는 React 컴포넌트 트리 안에서 전역적(global)이라고 볼 수 있는 데이터를 공유할 수 있도록 고안된 방법이다.
 
+Context에 저장된 데이터를 사용하기 위해서는
+Context 변수를 만들어주고 거기에 내장된 메소드를 사용하여
+공통 부모 컴포넌트에 Context의 Provider 메소드를 사용하여 데이터를 제공해야 하며
+데이터를 사용하려는 컴포넌트에서 Context의 Consumer 메소드를 사용하여 실제로 데이터를 사용한다.
+
+< context 내장 메소드를 import하여 사용하는 방법 1 >
+import React, { createContext } from 'react';
+const MyContext = createContext();
+< context 내장 메소드를 import하여 사용하는 방법 2 >
+import React from 'react';
+const MyContext = React.createContext();  // const MyContext = React.createContext('초기값');
+
+< context 를 사용하지않아 비효율적인 연속적인 props 데이터 전달 예시 코드 >
+
+function App(props) {
+  return <Toolbar theme="dark" />;
+  // Toolbar컴포넌트에 theme데이터값 전달함
+  // 즉, 이는 굳이 나타내자면, theme="dark"
+}
+
+function Toolbar(props) {  // 여기서 props는 App컴포넌트의 theme="dark"
+  // 이 Toolbar 컴포넌트는 ThemeButton에 theme를 넘겨주기 위해서 'theme' prop을 가져야만 한다.
+  // 현재 테마를 알아야 하는 모든 버튼에 대해서 props로 전달하는 것은 굉장히 비효율적이다.
+  return (
+    <div>
+      <ThemedButton theme={props.theme} />
+    </div>
+  );
+  // {App컴포넌트.theme}
+  // 즉, 이는 굳이 나타내자면, theme={App컴포넌트props.theme}
+}
+
+function ThemedButton(props) {  // 여기서 props는 Toolbar컴포넌트의 theme={props.theme}
+  return <Button theme={props.theme} />;
+  // {Toolbar컴포넌트.theme}
+  // 즉, 이는 굳이 나타내자면, theme={App컴포넌트props.theme.theme}
+}
+
+// 최상위 컴포넌트: App, 중간 컴포넌트: Toolbar, 최하위 컴포넌트: ThemedButton
+// 코드 목적: 최상위 컴포넌트에서 데이터를 최하위 컴포넌트로 전달하고 싶음.
+// context 사용하지않아 비효율적인 데이터 전달 과정: 최상위App -> 중간Toolbar -> 최하위ThemedButton  // 바로 전달 불가능
+
+< context 를 사용하여 효율적인 데이터 전달 예시 코드 >
+
+import React from 'react';
+const ThemeContext = React.createContext('light');  // context 변수 생성
+
+function App(props) {
+  // context 변수에 Provider 메소드를 사용하여 하위 컴포넌트들에게 테마 데이터값을 전달한다.
+  // 아무리 깊숙히 있어도, 모든 컴포넌트가 이 값을 읽을 수 있다.
+  // 아래 예시에서는 dark를 현재 선택된 테마 값으로 보내고 있다.
+  // 참고로 value="dark" 로 주었기때문에 나중에 Consumer메소드로 사용할때도 {value}이다.
+  return (
+    <ThemeContext.Provider value="dark">
+      <Toolbar />
+    </ThemeContext.Provider>
+  );
+}
+
+// 이젠 중간에 있는 컴포넌트가 중간매개체 역할로 일일이 테마를 넘겨줄 필요가 없기에 그저 선언만 해주면된다.
+function Toolbar() {
+  return (
+    <div>
+      <ThemedButton />
+    </div>
+  );
+}
+
+function ThemedButton(props) {
+  // Provider 메소드로 전달되었던 데이터를 직접 Consumer 메소드를 사용하여 데이터값을 사용한다.
+  // 만약 해당되는 Provider가 없을 경우 기본값(여기에서는 'light')을 사용하지만,
+  // 여기에서는 상위 Provider가 존재하기때문에 현재 테마의 값은 'dark'가 된다.
+  return (
+    <ThemeContext.Consumer>
+      {value => <Button theme={value} />}
+    </ThemeContext.Consumer>
+  );
+}
+
+// 최상위 컴포넌트: App, 중간 컴포넌트: Toolbar, 최하위 컴포넌트: ThemedButton
+// 코드 목적: 최상위 컴포넌트에서 데이터를 최하위 컴포넌트로 전달하고 싶음.
+// context 사용하여 효율적인 데이터 전달 과정: 최상위App -> 최하위ThemedButton  // 바로 전달 가능
+
+< context 사용시 고려해야할점 >
+context의 주된 용도는 다양한 레벨에 많은 컴포넌트에게 데이터를 전달하는 것이다. context를 사용하면 컴포넌트의 재사용성이 떨어지므로 꼭 필요할 때만 쓰는것이 좋다.
+그렇기에 위의 경우가 아니라면, 여러 레벨에 걸쳐 props 넘기는 걸 대체하는 데에 'context' 방법보다 '컴포넌트 합성(Composition)' 방법이 더 좋을것이다.
+또는 렌더링해야될 컴포넌트를 변수처럼 다루고 싶을때 리액트의 엘리먼트를 변수처럼 다루는 방법인 'Element Variables(엘리먼트 변수)'도 활용해보면 좋다.
+
 -------------------
 
 ```
