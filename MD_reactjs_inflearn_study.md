@@ -1123,4 +1123,48 @@ React에서 state를 공유하는 일은 그 값을 필요로 하는 컴포넌�
 
 -------------------
 
+컴포넌트 합성(Composition)의 예시 코드로 두가지 컴포넌트의 특정 부분을 가져와보았다.
+
+< 예시코드 >
+function Dialog(props) {
+  return (
+    <FancyBorder color="blue">
+      <h1 className="Dialog-title">
+        {props.title}
+      </h1>
+      <p className="Dialog-message">
+        {props.message}
+      </p>
+      {props.children}
+    </FancyBorder>
+  );
+}
+
+function SignUpDialog(props) {
+  // useState훅이랑 이벤트 메소드들 정의 등등 생략
+  return (
+      <Dialog title="화성 탐사 프로그램"
+              message="닉네임을 입력해주세요.">
+        <input value={nickname}
+               onChange={handleChange} />
+        <button onClick={handleSignUp}>
+          가입하기
+        </button>
+      </Dialog>
+    );
+}
+
+props.children 은 원래 리액트에 내장되어있어 사용이 가능하며, 이는 해당 컴포넌트의 하위 컴포넌트의 태그 부분들을 가져온다.
+이는 컴포넌트 합성(Composition) 중에서 Containment 방법에 속한다.
+Dialog 컴포넌트의 {props.children} 부분이며,
+SignUpDialog 컴포넌트의 input태그, button태그 부분을 가져온다.
+
+또다른 컴포넌트 합성(Composition)으로는 Specialization 방법도 있다.
+Dialog 컴포넌트의 {props.title}와 {props.message} 부분이며,
+SignUpDialog 컴포넌트의 <Dialog name="~~" message="~~"> 부분의 값을 가져온다.
+
+결론: 복잡한 컴포넌트를 쪼개서 여러 개의 컴포넌트로 만들고, 만든 컴포넌트들을 조합해서 새로운 컴포넌트를 만들자!
+
+-------------------
+
 ```
