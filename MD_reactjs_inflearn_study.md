@@ -1170,23 +1170,59 @@ SignUpDialog 컴포넌트의 <Dialog name="~~" message="~~"> 부분의 값을 �
 -------------------
 
 < context 란? >
+
 일반적인 React 애플리케이션에서 데이터는 위에서 아래로 (즉, 부모로부터 자식에게) props를 통해 전달되지만,
 props를 통해 전달 전달 전달 이렇게 연속적으로 쭉 내려가며 데이터를 전달하는 등의
 애플리케이션 안의 여러 컴포넌트들에 전해줘야 하는 props의 경우 (예를 들면 선호 로케일, UI 테마) 이 과정이 번거로울 수 있다.
-이는 context를 이용하면, 트리 단계마다 명시적으로 props를 넘겨주지 않아도 많은 컴포넌트가 이러한 값을 공유하도록 할 수 있다.
+이는 context api의 context를 이용하면, 트리 단계마다 명시적으로 props를 넘겨주지 않아도 많은 컴포넌트가 이러한 값을 공유하도록 할 수 있다.
 context는 React 컴포넌트 트리 안에서 전역적(global)이라고 볼 수 있는 데이터를 공유할 수 있도록 고안된 방법이다.
+즉, 일반적으로 부모와 자식간 props를 날려 state를 변화시키는 것과는 달리 context api는 컴포넌트 간 간격이 없기에, context로 컴포넌트를 건너뛰고 다른 컴포넌트에서 state, function을 사용할 수 있게 되는것이다.
 
 Context에 저장된 데이터를 사용하기 위해서는
-Context 변수를 만들어주고 거기에 내장된 메소드를 사용하여
+Context 객체변수를 만들어주고 거기에 내장된 메소드를 사용하여
 공통 부모 컴포넌트에 Context의 Provider 메소드를 사용하여 데이터를 제공해야 하며
 데이터를 사용하려는 컴포넌트에서 Context의 Consumer 메소드를 사용하여 실제로 데이터를 사용한다.
+
+< context의 Provider / Context.Provider >
+
+// context의 Consumer 사용 형태 예시코드
+<MyContext.Provider value={/* 어떤 값 */}>
+
+Context 오브젝트에 포함된 React 컴포넌트인 Provider는 context를 구독하는 컴포넌트들에게 context의 변화를 알리는 역할을 한다.
+Provider 컴포넌트는 value prop을 받아서 이 값을 하위에 있는 컴포넌트에게 전달한다. 값을 전달받을 수 있는 컴포넌트의 수에 제한은 없다.
+Provider 하위에 또 다른 Provider를 배치하는 것도 가능하며, 이 경우 하위 Provider의 값이 우선시된다.
+
+< context의 Consumer / Context.Consumer >
+
+// context의 Consumer 사용 형태 예시코드
+<MyContext.Consumer>
+  {value => /* context의 값인 value를 이용하여 컴포넌트들을 렌더링 */}
+</MyContext.Consumer>
+// !!! 참고로 주의사항은 아마도 Consumer 사용할땐 {value => ~~ {value} ~~} 에서 value 대신 다른 이름으로 원하는걸로 바꿔서 적어줄수도 있는듯하다. 대신 좌항 우항 같은 이름으로 말이다. !!!
+
+Consumer는 context 변화를 구독하는 React 컴포넌트이다. 이 컴포넌트를 사용하면 함수 컴포넌트안에서 context를 구독할 수 있다.
+Context.Consumer의 자식은 함수여야한다.
+value 매개변수 값은 해당 context의 Provider 중 상위 트리에서 가장 가까운 Provider의 value prop과 동일하다. (아마 내생각엔 이말의 뜻은, Consumer 사용부분에서부터 위로올라가며 가장 가까운 상위 Provider의 value를 뜻하는것같다.)
+즉, 이 함수(컴포넌트)가 가지는 context 값은 가장 가까운 provider의 값이다.
+상위에 Provider가 없다면 value 매개변수 값은 createContext()에 보냈던 defaultValue와 동일할 것이다.
+
+< context 렌더링 관련 설명 >
+
+Provider 하위에서 context를 구독하는 모든 컴포넌트는 Provider의 value prop가 바뀔 때마다 다시 렌더링 된다.
+즉, Provider 컴포넌트가 재렌더링될 때마다, 모든 하위 consumer 컴포넌트들이 재렌더링 된다.
+참고로 context 값의 바뀌었는지 여부는 Object.is와 동일한 알고리즘을 사용해 이전 값과 새로운 값을 비교해 측정할수있다.
 
 < context 내장 메소드를 import하여 사용하는 방법 1 >
 import React, { createContext } from 'react';
 const MyContext = createContext();
 < context 내장 메소드를 import하여 사용하는 방법 2 >
 import React from 'react';
-const MyContext = React.createContext();  // const MyContext = React.createContext('초기값');
+const MyContext = React.createContext();  // const MyContext = React.createContext('초기기본값');
+
+// 이는 Context 객체를 만드는 과정인데, Context 객체를 구독하고 있는 컴포넌트를 렌더링할 때 React는 트리 상위에서 가장 가까이 있는 짝이 맞는 Provider로부터 현재값을 읽는다.
+
+// 만약 상위 레벨에 매칭되는 Provider가 없다면 기본값이 사용된다.
+// 참고로 기본값으로 undefined를 넣으면 기본값이 사용되지 않는다.
 
 < context 를 사용하지않아 비효율적인 연속적인 props 데이터 전달 예시 코드 >
 
@@ -1218,7 +1254,7 @@ function ThemedButton(props) {  // 여기서 props는 Toolbar컴포넌트의 the
 // 코드 목적: 최상위 컴포넌트에서 데이터를 최하위 컴포넌트로 전달하고 싶음.
 // context 사용하지않아 비효율적인 데이터 전달 과정: 최상위App -> 중간Toolbar -> 최하위ThemedButton  // 바로 전달 불가능
 
-< context 를 사용하여 효율적인 데이터 전달 예시 코드 >
+< context 를 사용하여 효율적인 데이터 전달 예시 코드 & Provider & Consumer >
 
 import React from 'react';
 const ThemeContext = React.createContext('light');  // context 변수 생성
@@ -1227,7 +1263,6 @@ function App(props) {
   // context 변수에 Provider 메소드를 사용하여 하위 컴포넌트들에게 테마 데이터값을 전달한다.
   // 아무리 깊숙히 있어도, 모든 컴포넌트가 이 값을 읽을 수 있다.
   // 아래 예시에서는 dark를 현재 선택된 테마 값으로 보내고 있다.
-  // 참고로 value="dark" 로 주었기때문에 나중에 Consumer메소드로 사용할때도 {value}이다.
   return (
     <ThemeContext.Provider value="dark">
       <Toolbar />
@@ -1263,6 +1298,146 @@ function ThemedButton(props) {
 context의 주된 용도는 다양한 레벨에 많은 컴포넌트에게 데이터를 전달하는 것이다. context를 사용하면 컴포넌트의 재사용성이 떨어지므로 꼭 필요할 때만 쓰는것이 좋다.
 그렇기에 위의 경우가 아니라면, 여러 레벨에 걸쳐 props 넘기는 걸 대체하는 데에 'context' 방법보다 '컴포넌트 합성(Composition)' 방법이 더 좋을것이다.
 또는 렌더링해야될 컴포넌트를 변수처럼 다루고 싶을때 리액트의 엘리먼트를 변수처럼 다루는 방법인 'Element Variables(엘리먼트 변수)'도 활용해보면 좋다.
+
+-------------------
+
+< context의 Provider 주의사항 >
+
+function App(props) {
+  return (
+    <MyContext.Provider value={{something: 'something'}}>
+      <Toolbar />
+    </MyContext.Provider>
+  );
+  // 참고로 {{something: 'something'}} 인 이유는 원래 사용해야할 {}도 있고, 객체 자료형은 {}인 이유도 있기때문에 중괄호를 두번 적어준것이다.
+}
+
+// 이처럼 Provider 컴포넌트가 재렌더링될 때마다(value={{something: 'something'}} 부분말이다), 모든 하위 consumer 컴포넌트들이 재렌더링 되기때문에 속도가 느려질수있다.
+
+< 위의 경우 주의사항 해결 방안 >
+
+function App(props) {
+  const [value, setValue] = useState({ something: 'something' });
+
+  return (
+    <MyContext.Provider value={{something: 'something'}}>
+      <Toolbar />
+    </MyContext.Provider>
+  );
+}
+
+// 이처럼 Provider의 value에 직접 렌더링을 시킬것이 아니라, state를 사용하여 따로 분리해주면 불필요한 재렌더링을 막을수있다.
+
+-------------------
+
+< 여러 context 구독하는, 여러 Provider와 Consumer를 사용한 예시 코드 >
+
+// 기본값이 light인  ThemeContext
+const ThemeContext = React.createContext('light');
+
+// 로그인한 유저 정보를 담는 UserContext
+const UserContext = React.createContext({
+  name: 'Guest',
+});
+
+// Provider 사용한 최상위 컴포넌트
+class App extends React.Component {
+  render() {
+    const {signedInUser, theme} = this.props;
+
+    // context 초기값을 제공하는 App 컴포넌트
+    return (
+      <ThemeContext.Provider value={theme}>
+        <UserContext.Provider value={signedInUser}>
+          <Layout />
+        </UserContext.Provider>
+      </ThemeContext.Provider>
+    );
+  }
+}
+
+// 중간 컴포넌트
+function Layout() {
+  return (
+    <div>
+      <Content />
+    </div>
+  );
+}
+
+// 여러가지 context의 값을 받는, Consumer 사용한 최하위 컴포넌트
+// 변수명은 value 대신, 좌항과 우항이 같도록 원하는 이름으로 바꿔 적어주어도 되는듯하다. 아마도?
+function Content() {
+  return (
+    <ThemeContext.Consumer>
+      {theme => (
+        <UserContext.Consumer>
+          { user => ( <ProfilePage user={user} theme={theme} /> ) }
+        </UserContext.Consumer>
+      )}
+    </ThemeContext.Consumer>
+  );
+}
+
+// 하지만 둘 이상의 context 값이 함께 쓰이는 경우가 많다면, 차라리 그 모든 값들을 한 번에 받는 render prop 컴포넌트를 직접 따로 만들어 응용해 사용해보는 방법을 고려해보는것이 좋다.
+
+-------------------
+
+< useContext 훅 설명 >
+
+함수 컴포넌트에서 context의 Consumer를 사용할때 더 쉽게 사용하는 방법이 있는데, 그게 바로 useContext 훅 이다.
+useContext 훅은, context 객체(React.createContext에서 반환된 값)을 받아 그 context의 현재 값을 반환한다.
+context의 현재 값은 트리 안에서 이 Hook을 호출하는 컴포넌트에 가장 가까이에 있는 <MyContext.Provider>의 value prop에 의해 결정된다.
+주의할점은, useContext로 전달한 인자는 context 객체 그 자체이어야 함을 잊지 말아야한다.
+
+사용 방법은
+전역적인 범위 부분에 const MyContext = React.createContext('light'); 적어주고,
+Provider은 평소쓰던대로 똑같은 방식으로 명시해주면 되고,
+Consumer은 사용하지말고, 대신 먼저 useContext 훅으로 변수에 할당해준다. 그리고 이제 그냥 그 변수를 사용하면 된다.
+그 예시는 코드로 밑에 적겠다.
+
+< 함수 컴포넌트에서 'useContext 훅'을 사용한 예시 코드 >
+
+import React, { useContext } from "react";
+
+const themes = {
+  light: {
+    foreground: "#000000",
+    background: "#eeeeee"
+  },
+  dark: {
+    foreground: "#ffffff",
+    background: "#222222"
+  }
+};
+
+const ThemeContext = React.createContext(themes.light);
+
+function App() {
+  return (
+    <ThemeContext.Provider value={themes.dark}>
+      <Toolbar />
+    </ThemeContext.Provider>
+  );
+}
+
+function Toolbar(props) {
+  return (
+    <div>
+      <ThemedButton />
+    </div>
+  );
+}
+
+function ThemedButton() {
+  const theme = useContext(ThemeContext);  // value는 그냥 자신이 원하는 변수명으로 적어주면 된다.
+
+  return (
+    <button style={{ background: theme.background, color: theme.foreground }}>
+      I am styled by theme context!
+    </button>
+  );
+}
 
 -------------------
 
