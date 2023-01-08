@@ -1431,6 +1431,7 @@ function Toolbar(props) {
 
 function ThemedButton() {
   const theme = useContext(ThemeContext);  // value는 그냥 자신이 원하는 변수명으로 적어주면 된다.
+  // 예시로 만약 Provider로 준게 <ThemeContext.Provider value={{ theme, toggleTheme }}> 처럼 두가지 이상 이면, const { theme, toggleTheme } = useContext(ThemeContext); 이런식으로 적어줘서 똑같이 사용해주면 된다.
 
   return (
     <button style={{ background: theme.background, color: theme.foreground }}>
@@ -1438,6 +1439,21 @@ function ThemedButton() {
     </button>
   );
 }
+
+-------------------
+
+< Context.displayName >
+
+// context의 displayName 메소드는, 해당 할당한 context객체의 이름을 내가 원하는 이름으로 직접 명시하여, 나중에 크롬 검사 개발자 도구에서 해당 이름으로 볼 수 있게 해준다.
+
+import React from "react";
+
+const ThemeContext = React.createContext();
+ThemeContext.displayName = "ThemeContextshj";
+
+export default ThemeContext;
+
+// 이러면 나중에 크롬 검사 개발자도구에서 리액트의 Components 를 들어가보면, ThemeContextshj.Provider 이나 ThemeContextshj.Consumer 이런식으로 명시되어 출력해 보여준다.
 
 -------------------
 
