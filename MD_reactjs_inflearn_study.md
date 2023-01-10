@@ -1457,4 +1457,8 @@ export default ThemeContext;
 
 -------------------
 
+styled-components: css문법을 그대로 사용하면서, 결과물을 styling된 컴포넌트 형태로 만들어주는 오픈소스 라이브러리 이다.
+
+-------------------
+
 ```
