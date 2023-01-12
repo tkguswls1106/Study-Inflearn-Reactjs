@@ -1459,6 +1459,44 @@ export default ThemeContext;
 
 styled-components: css문법을 그대로 사용하면서, 결과물을 styling된 컴포넌트 형태로 만들어주는 오픈소스 라이브러리 이다.
 
+보통 스타일드 컴포넌트를 사용할때, 백틱(`)으로 template literal 을 활용하여 코드를 작성한다.
+template literal 에 대한 예시 설명은, 설명관련 사진자료 파일에 첨부해두었음.
+
+styled.html태그 이런식으로 사용하며,
+그리고 styled(사용할 컴포넌트) 형식으로 스타일 추가도 가능하다.
+
+< 스타일드 컴포넌트 사용한 예시 코드 >
+
+import React from "react";
+import styled from 'styled-components';
+
+// div태그에 스타일넣은 Wrapper 컴포넌트 생성
+const Wrapper = styled.div`
+  padding: 1em;
+`;
+
+// Button 컴포넌트
+const Button = styled.button`
+  color: grey;
+  border: 2px;
+`;
+
+// Button에 style이 추가된 RoundedButton 컴포넌트
+const RoundedButton = styled(Button)`
+  border-radius: 16px;
+`;
+
+function Sample(props) {
+  return (
+    <Wrapper>
+      <Button>Normal</Button>
+      <RoundedButton>Rounded</RoundedButton>
+    </Wrapper>
+  )
+}
+
+export default Sample;
+
 -------------------
 
 ```
