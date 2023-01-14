@@ -1518,7 +1518,7 @@ react-router-dom을 이용한 라우팅 구성 코드 예시와 설명은 밑에
   </Routes>
 </BrowserRouter>
 
-예를들어 www.sahyunjin.com 이면, <MainPage /> 컴포넌트를 렌더링하여 화면에 띄워준다.
+예를들어 www.sahyunjin.com/ 이면, <MainPage /> 컴포넌트를 렌더링하여 화면에 띄워준다.
 예를들어 www.sahyunjin.com/places 이면, <PlacePage /> 컴포넌트를 렌더링하여 화면에 띄워준다.
 예를들어 www.sahyunjin.com/games 이면, <GamePage /> 컴포넌트를 렌더링하여 화면에 띄워준다.
 
