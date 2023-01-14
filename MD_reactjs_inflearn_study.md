@@ -1161,7 +1161,7 @@ SignUpDialog 컴포넌트의 input태그, button태그 부분을 가져온다.
 
 또다른 컴포넌트 합성(Composition) 방법으로는 Specialization 방법도 있다.
 Dialog 컴포넌트의 {props.title}와 {props.message} 부분이며,
-SignUpDialog 컴포넌트의 <Dialog name="~~" message="~~"> 부분의 값을 가져온다.
+SignUpDialog 컴포넌트의 <Dialog title="~~" message="~~"> 부분의 값을 가져온다.
 
 또다른 예시 코드는 코드들중에서 chapter_13 파트 부분을 보면 된다.
 
