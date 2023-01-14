@@ -1457,6 +1457,12 @@ export default ThemeContext;
 
 -------------------
 
+< !!! 강의 'Mini Project' 파트 주의사항 !!! >
+참고로 이 강의의 마지막 파트인 'Mini Project' 개발은 다른 프로젝트 폴더에 코드가 적힐것이다.
+단, 이는 form없이 개발하여 겉부분만 짠 코드이다. 즉, 실제로 백엔드와 응용할땐 내부 코드도 약간 다르게 적힌 부분도있으니, 데이터 전송 관련 코드로 내가 직접 바꿔주고 적어주어야한다.
+
+-------------------
+
 styled-components: css문법을 그대로 사용하면서, 결과물을 styling된 컴포넌트 형태로 만들어주는 오픈소스 라이브러리 이다.
 
 보통 스타일드 컴포넌트를 사용할때, 백틱(`)으로 template literal 을 활용하여 코드를 작성한다. template literal 에 대한 예시 설명은, 설명관련 사진자료 파일에 첨부해두었음.
@@ -1499,9 +1505,53 @@ export default Sample;
 
 -------------------
 
-< !!! 강의 'Mini Project' 파트 주의사항 !!! >
-참고로 이 강의의 마지막 파트인 'Mini Project' 개발은 다른 프로젝트 폴더에 코드가 적힐것이다.
-단, 이는 form없이 개발하여 겉부분만 짠 코드이다. 즉, 실제로 백엔드와 응용할땐 내부 코드도 약간 다르게 적힌 부분도있으니, 데이터 전송 관련 코드로 내가 직접 바꿔주고 적어주어야한다.
+< react-router-dom >
+
+react-router-dom은 사이트의 url path에 인한 페이지 이동 관련 라이브러리이다. 
+react-router-dom을 이용한 라우팅 구성 코드 예시와 설명은 밑에 적어두겠다.
+
+<BrowserRouter>
+  <Routes>
+    <Route index element={<MainPage />} />
+    <Route path="places" element={<PlacePage />} />
+    <Route path="games" element={<GamePage />} />
+  </Routes>
+</BrowserRouter>
+
+예를들어 www.sahyunjin.com 이면, <MainPage /> 컴포넌트를 렌더링하여 화면에 띄워준다.
+예를들어 www.sahyunjin.com/places 이면, <PlacePage /> 컴포넌트를 렌더링하여 화면에 띄워준다.
+예를들어 www.sahyunjin.com/games 이면, <GamePage /> 컴포넌트를 렌더링하여 화면에 띄워준다.
+
+< useNavigate() 훅 >
+
+useNavigate()은 사이트의 url path를 다른 path로 이동하여 접속할수있게 해주는 react-router-dom의 훅이다.
+useNavigate()의 사용 예시 코드는 밑에 적어두겠다.
+
+import { useNavigate } from "react-router-dom";
+
+function Sample(props) {
+    const navigate = useNavigate();
+
+    return (
+        <Wrapper>
+            <Container>
+                <Button
+                    title="글 작성하기"
+                    onClick={() => {
+                        navigate("/post-write");
+                    }}
+                />
+
+                <PostList
+                    posts={data}
+                    onClickItem={(item) => {
+                        navigate(`/post/${item.id}`);
+                    }}
+                />
+            </Container>
+        </Wrapper>
+    );
+}
 
 -------------------
 
