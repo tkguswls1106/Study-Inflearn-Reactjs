@@ -1510,6 +1510,8 @@ export default Sample;
 react-router-dom은 사이트의 url path에 인한 페이지 이동 관련 라이브러리이다. 
 react-router-dom을 이용한 라우팅 구성 코드 예시와 설명은 밑에 적어두겠다.
 
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 <BrowserRouter>
   <Routes>
     <Route index element={<MainPage />} />
@@ -1550,6 +1552,60 @@ function Sample(props) {
                 />
             </Container>
         </Wrapper>
+    );
+}
+
+< useParams() 훅 >
+
+useParams()은 사이트의 url path중에서, '/:로 시작하며 동적으로 변하는 파라미터'의 path값에 접근할수있게해주는 react-router-dom의 훅이다.
+useParams()의 사용 예시 코드는 밑에 적어두겠다.
+
+- App.js 파일 부분 -
+
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+function App(props) {
+    return (
+        <BrowserRouter>
+            <p>사현진의 미니 블로그</p>
+            <Routes>
+                <Route index element={<MainPage />} />
+                <Route path="post/:postId" element={<PostViewPage />} />
+            </Routes>
+        </BrowserRouter>
+    );
+}
+
+- MainPage.jsx 파일 부분 -
+
+import { useNavigate } from "react-router-dom";
+
+function MainPage(props) {
+    const navigate = useNavigate();
+
+    return (
+        <PostList
+            posts={data}
+            onClickItem={(item) => {
+                navigate(`/post/${item.id}`);
+            }}
+        />
+    );
+}
+
+- PostViewPage.jsx 파일 부분 -
+
+import { useParams } from "react-router-dom";
+
+function PostViewPage(props) {
+    const { postId } = useParams();
+
+    const post = data.find((item) => {  // 먼저 props로 전달받은 글의 id를 통해서, 전체 data데이터에서 해당 id와 일치하는 글을 찾아서 불러와, 변수 post에 할당한다.
+        return item.id == postId;
+    });
+
+    return (
+        <p>{post.title}</p>
     );
 }
 
