@@ -3,9 +3,9 @@
 **리액트 인프런 강의 영상 사이트: https://www.inflearn.com/course/%EC%B2%98%EC%9D%8C-%EB%A7%8C%EB%82%9C-%EB%A6%AC%EC%95%A1%ED%8A%B8/dashboard**
 ```
 - npx 관련 코드 사용해서 리액트 프로젝트 생성 -
-npx create-react-app 프로젝트명
+npx create-react-app 프로젝트명(대문자 불가능)
 
-- 필요한 패키지 추가 설치 -
+- cd로 해당 프로젝트로 이동후 필요한 패키지 추가 설치 -
 npm install --save react-router-dom styled-components
 
 - cd로 해당 프로젝트로 이동후 터미널에 이걸 입력해서 리액트 실행 -
