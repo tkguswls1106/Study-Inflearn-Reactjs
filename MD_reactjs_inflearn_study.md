@@ -580,6 +580,11 @@ useRef() 사용은, .current 프로퍼티값을 변경해도 리렌더링이 일
 그 각각의 함수 컴포넌트 1,2들은 같은 커스텀 훅을 호출하여 사용하긴했지만 각각 state와 effect는 분리되어 작동하고 적용된다.
 뿐만아니라, 하나의 함수 컴포넌트에서 같은 커스텀 훅을 여러번 호출하여도, 커스텀 훅의 호출들도 모두 각각 완전히 독립적이다.
 
+참고로 훅 종류 사용할때에는 커스텀 훅도 마찬가지로
+const {count, increaseCount, decreaseCount} = useCounter(0);  이런식으로 {}가 아닌,
+const [count, increaseCount, decreaseCount] = useCounter(0);  이런식으로 []로 받아주어야한다.
+그냥 일단 props 받아서 넣어줄때에는 const {HelloHandler} = props; 이런게 맞으니 헷갈리지 말자.
+
 -------------------
 
 < chapter_07 / Accommodate.jsx >
