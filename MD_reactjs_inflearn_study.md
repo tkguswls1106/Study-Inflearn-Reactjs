@@ -1472,6 +1472,12 @@ export default ThemeContext;
 
 -------------------
 
+참고로 리액트에서 App.js 파일이든 jsx 파일이든간에
+리액트내에서는 태그의 css class 이름을 적어줄때에 class="" 보다 className="" 이 더 맞는 표현이다.
+그리고 리액트에서 css inline styling 할때 kebab-case 말고 camelCase를 사용해야한다.
+
+-------------------
+
 styled-components: css문법을 그대로 사용하면서, 결과물을 styling된 컴포넌트 형태로 만들어주는 오픈소스 라이브러리 이다.
 
 보통 스타일드 컴포넌트를 사용할때, 백틱(`)으로 template literal 을 활용하여 코드를 작성한다. template literal 에 대한 예시 설명은, 설명관련 사진자료 파일에 첨부해두었음.
