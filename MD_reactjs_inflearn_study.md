@@ -951,6 +951,8 @@ ReactDOM.render(
 
 < map 과 key값 >
 
+key는 map메소드를 사용할때 그 안의 return ( ); 안에 가장 가까운 태그 부분 안에 적어주면 된다.
+
 key는 꼭 태그 안에 적어주어야한다.
 const listItems = numbers.map((number) =>
   <li key={~~}>
